@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Compound Interest Solver</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Calibri, sans-serif;
+      font-size: 27px;
+      font-weight: bold;
+      background: #f6f8fb;
+    }
+    .main-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .input-form {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 800px;
+      text-align: center;
+    }
+    .input-form input {
+      font-size: 18px;
+      padding: 8px;
+      margin: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .input-form button {
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      background-color: #1BAD83;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 1120px;
+      margin: auto;
+      background: white;
+      display: flex;
+      gap: 0px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 50px 86px;
+      position: relative;
+    }
+    .arrow-col { width: 40px; position: relative; margin-right: 10px; }
+    .arrow { position: absolute; left: 0; font-size: 30px; color: #888; }
+    .arrow1 { top: 50px; } .arrow2 { top: 216px; } .arrow3 { top: 369PX; } .arrow4 { top: 525px; } .arrow5 { top: 647px; }
+    .left-col { flex: 1.2; display: flex; flex-direction: column; gap: 15px; }
+    .right-col { flex: 1.2; display: flex; flex-direction: column; gap: 15px; padding-left: 54px; }
+    .step { display: flex; align-items: center; gap: 10px; }
+    .bracket { background: #ffeaea; padding: 10px 20px; display: flex; align-items: center; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+    .fraction { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 5px; }
+    .fraction .top { padding: 3px 17px; }
+    .fraction .bottom { border-top: 2px solid #000; padding: 0 6px; }
+    .varbox { padding: 3px 17px; border-radius: 6px; display: inline-block; margin: 0 4px; box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15); }
+    .numbox { background: #ffffff; padding: 2px 12px; border-radius: 6px; display: inline-block; margin: 0 4px; box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15); z-index: 2; }
+    .highlight { background: #1bad83; color: white; padding: 2px 12px; border-radius: 6px; box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15); font-size: 30px; }
+    .dashed-container { display: flex; justify-content: space-between; gap: 20px; position: relative; align-items: center; }
+    .dashed-line { width: 0; border-left: 3px dashed #000; height: 70px; position: relative; top: 5px; }
+    .blackbox-inline { background: #222; color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 27px; box-shadow: 2px 2px 6px rgba(0,0,0,0.3); gap: 10px; }
+    .blackbox { background: #222; color: #fff; padding: 15px; border-radius: 10px; box-shadow: 2px 2px 6px rgba(0,0,0,0.3); text-align: center; display: flex; gap: 31px; }
+    .blackbox-container { position: relative; }
+    .long-arrow { position: absolute; top: -12px; left: 177px; transform: translateX(-50%); width: 2px; height: 94px; background: white; z-index: 1; rotate: 270deg; }
+    .long-arrow::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white; }
+    .right-top-box { display: flex; align-items: center; gap: 10px; background: #fff; border: 3px dashed #6d6d6d; padding: 10px; border-radius: 12px; }
+    .right-top-box img { width: 90px; height: 121px; }
+    .vertical-content { display: flex; flex-direction: column; gap: 5px; }
+    .calc-line { display: flex; align-items: center; gap: 10px; }
+    .thirdBracket { font-size: 100px; font-weight: 100; }
+    #error-message-interest { color: red; font-size: 16px; margin-top: 10px; visibility: hidden; }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+ 
+    <div class="input-form">
+        <h2>Compound Interest Calculator</h2>
+        <form id="interest-form">
+            <input type="number" id="principal" placeholder="Principal (P)" required>
+            <input type="number" id="rate" placeholder="Rate (r) %" required>
+            <input type="number" id="time" placeholder="Time (t) years" required>
+            <button type="submit">Calculate</button>
+        </form>
+        <p id="error-message-interest">Please enter valid, non-zero numbers.</p>
+    </div>
+
+    
+    <div class="container">
+      <div class="arrow-col">
+        <div class="arrow arrow1">➜</div>
+        <div class="arrow arrow2">➜</div>
+        <div class="arrow arrow3">➜</div>
+        <div class="arrow arrow4">➜</div>
+        <div class="arrow arrow5">➜</div>
+      </div>
+      <div class="left-col">
+       
+        <div class="step">
+          <span class="numbox" id="p1">12000</span>
+          <span>=</span>
+          <div class="bracket">
+            <span class="thirdBracket">[</span> 1 +
+            <span class="fraction">
+              <span class="top varbox">r</span>
+              <span class="bottom">100</span>
+            </span> <span class="thirdBracket">]</span> <sup id="t1">3</sup>
+          </div>
+          <span>=</span>
+          <span class="numbox" id="a1">20736</span>
+        </div>
+        
+        <div style="position: relative; left:130px; display: flex;flex-direction: column ; row-gap: 10px;">
+          <div class="step">
+            <div class="bracket">  <span class="thirdBracket">[</span> 1 +
+              <span class="fraction"><span class="top varbox">r</span><span class="bottom">100</span></span> <span class="thirdBracket">]</span><sup id="t2">3</sup>
+            </div>
+            <span>=</span>
+            <span class="fraction">
+              <span class="top" id="a2">20736</span>
+              <span class="bottom" id="p2">12000</span>
+            </span>
+          </div>
+          <!-- Step 3 -->
+          <div class="step">
+            <div class="bracket">  <span class="thirdBracket">[</span> 1 +
+              <span class="fraction"><span class="top varbox">r</span><span class="bottom">100</span></span>  <span class="thirdBracket">]</span><sup id="t3">3</sup>
+            </div>
+            <span>=</span>
+            <span class="fraction">
+              <span class="top" id="a-simple">216</span>
+              <span class="bottom" id="p-simple">125</span>
+            </span>
+          </div>
+          <!-- Step 4 -->
+          <div class="dashed-container">
+            <div class="bracket"> <span class="thirdBracket">[</span> 1 +
+              <span class="fraction"><span class="top varbox">r</span><span class="bottom">100</span></span>  <span class="thirdBracket">]</span>
+            </div>
+            <span>=</span>
+            <span class="fraction">
+              <span class="top"><span class="numbox" id="a-root">6</span></span>
+              <span class="bottom"><span class="numbox" id="p-root">5</span></span>
+            </span>
+            <div class="dashed-line"></div>
+            <div class="step">
+              <span class="blackbox-inline"><span id="a-root-cube">6³ = 216</span><br><span id="p-root-cube">5³ = 125</span></span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 5 -->
+        <div class="step">
+          <span class="varbox">r/100</span>
+          <span>=</span>
+          <span class="fraction">
+            <span class=" top" id="rate-num">1</span>
+            <span class="bottom" id="rate-den">5</span>
+          </span>
+           <span>=</span>
+           <span id="rate-dec">0.2</span>
+          <span class="varbox" style="margin-left: 80px;">r</span>
+          <span>=</span>
+          <span class="highlight" id="final-rate">20%</span>
+        </div>
+      </div>
+      <!-- Right Column -->
+      <div class="right-col">
+        <div class="right-top-box">
+          <img src="interesticon.png" alt="icon">
+          <div class="vertical-content">
+            <span>Interest Compounded Annually</span>
+            <div class="blackbox-container">
+              <div class="long-arrow"></div>
+              <div class="blackbox" style="color: #000;">
+                <span class="numbox" id="p-box">12000</span>
+                <span class="numbox" id="t-box">3</span>
+                <span class="numbox" id="a-box">20736</span>
+              </div>
+            </div>
+            <span style="text-align: center;">years</span>
+          </div>
+        </div>
+        <div class="blackbox" style="padding-left: 35px;">
+          Amount of the same sum in <span id="t-alt">2</span> years at<br />
+          the same rate of compound interest
+        </div>
+        <div style="position: relative;left: 126px; display: flex; flex-direction: column; row-gap: 20px;">
+          <div class="calc-line">
+            <span>=</span>
+            <span class="numbox" id="p-final">12000</span>
+            <span class="bracket">  <span class="thirdBracket">[</span>1 +
+              <span class="fraction">
+                <span class="top" id="r-final">20</span>
+                <span class="bottom">100</span>
+              </span>  <span class="thirdBracket">]</span> <sup id="t-final">2</sup>
+            </span>
+          </div>
+          <div class="calc-line">
+            <span>=</span>
+            <span class="numbox" id="p-final2">12000</span>
+            <span>×</span>
+            <span class="fraction">
+              <span class="top" id="rate-final-num">6</span>
+              <span class="bottom" id="rate-final-den">5</span>
+            </span>
+            <span>×</span>
+            <span class="fraction">
+              <span class="top" id="rate-final-num2">6</span>
+              <span class="bottom" id="rate-final-den2">5</span>
+            </span>
+          </div>
+          <div class="calc-line">
+            <span>=</span>
+            <span class="highlight" id="final-amount">17280</span>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+   
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+
+    document.getElementById('interest-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const p = parseFloat(document.getElementById('principal').value);
+        const r = parseFloat(document.getElementById('rate').value);
+        const t = parseFloat(document.getElementById('time').value);
+        const errorMsg = document.getElementById('error-message-interest');
+        
+        if (isNaN(p) || isNaN(r) || isNaN(t) || p <= 0 || r < 0 || t <= 0) {
+            errorMsg.style.visibility = 'visible';
+            return;
+        }
+        errorMsg.style.visibility = 'hidden';
+
+        const a = p * Math.pow((1 + r / 100), t);
+
+        document.getElementById('p1').textContent = p;
+        document.getElementById('t1').textContent = t;
+        document.getElementById('a1').textContent = a.toFixed(2);
+        
+        document.getElementById('t2').textContent = t;
+        document.getElementById('a2').textContent = a.toFixed(2);
+        document.getElementById('p2').textContent = p;
+
+        document.getElementById('t3').textContent = t;
+
+        const multiplier = 10000;
+        const commonDivisor = gcd(Math.round(a * multiplier), Math.round(p * multiplier));
+        const simpleA = (a * multiplier) / commonDivisor;
+        const simpleP = (p * multiplier) / commonDivisor;
+        document.getElementById('a-simple').textContent = simpleA;
+        document.getElementById('p-simple').textContent = simpleP;
+
+        
+        const rootA = Math.round(Math.pow(simpleA, 1/t));
+        const rootP = Math.round(Math.pow(simpleP, 1/t));
+        document.getElementById('a-root').textContent = rootA;
+        document.getElementById('p-root').textContent = rootP;
+        document.getElementById('a-root-cube').textContent = `${rootA}³ = ${Math.pow(rootA, t)}`;
+        document.getElementById('p-root-cube').textContent = `${rootP}³ = ${Math.pow(rootP, t)}`;
+
+ 
+        const rateNum = rootA - rootP;
+        const rateDen = rootP;
+        document.getElementById('rate-num').textContent = rateNum;
+        document.getElementById('rate-den').textContent = rateDen;
+        document.getElementById('rate-dec').textContent = (rateNum/rateDen).toFixed(2);
+        document.getElementById('final-rate').textContent = ((rateNum / rateDen) * 100).toFixed(2) + '%';
+        
+       
+        document.getElementById('p-box').textContent = p;
+        document.getElementById('t-box').textContent = t;
+        document.getElementById('a-box').textContent = a.toFixed(2);
+
+
+        
+        const alt_t = (t > 2) ? 2 : t + 1;
+        document.getElementById('t-alt').textContent = alt_t;
+        
+        const finalAmount = p * Math.pow((1 + r / 100), alt_t);
+        
+        document.getElementById('p-final').textContent = p;
+        document.getElementById('r-final').textContent = r;
+        document.getElementById('t-final').textContent = alt_t;
+
+        document.getElementById('p-final2').textContent = p;
+        
+        const rateFracNum = 100 + r;
+        const rateFracDen = 100;
+        const commonRateDiv = gcd(rateFracNum, rateFracDen);
+        
+        document.getElementById('rate-final-num').textContent = rateFracNum/commonRateDiv;
+        document.getElementById('rate-final-den').textContent = rateFracDen/commonRateDiv;
+        document.getElementById('rate-final-num2').textContent = rateFracNum/commonRateDiv;
+        document.getElementById('rate-final-den2').textContent = rateFracDen/commonRateDiv;
+        
+        document.getElementById('final-amount').textContent = finalAmount.toFixed(2);
+    });
+
+</script>
+</body>
+</html>
